@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
+import { addMovies } from "../actions";
 
 import { data } from "../data";
 class App extends React.Component {
@@ -16,11 +17,7 @@ class App extends React.Component {
 
     //make api call
     //dispatch action
-    store.dispatch({
-      // will update state in store
-      type: "ADD_MOVIES",
-      movies: data,
-    });
+    store.dispatch(addMovies(data));
     console.log("state", store.getState());
   }
 
