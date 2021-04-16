@@ -1,3 +1,4 @@
+import { combineReducers } from "redux";
 import {
   ADD_MOVIES,
   ADD_FAVOURITE,
@@ -53,9 +54,16 @@ const initialRootState = {
 //call both reducers from root
 // pass root to store
 // on each dispatch root will be called ,so both reducers will also be called
-export default function rootReducer(state = initialRootState, action) {
-  return {
-    movies: movies(state.movies, action),// calling movie reducer to update movie
-    search: search(state.search, action),// calling search reducer to update movie
-  };
-}
+// export default function rootReducer(state = initialRootState, action) {
+//   return {
+//     movies: movies(state.movies, action),// calling movie reducer to update movie
+//     search: search(state.search, action),// calling search reducer to update movie
+//   };
+// }
+
+// on background it will do same as root Reducers
+export default combineReducers({
+  movies, //movies(state property):movies(reducer managing that)
+    search
+})
+
