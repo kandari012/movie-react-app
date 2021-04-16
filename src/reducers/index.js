@@ -64,6 +64,5 @@ const initialRootState = {
 // on background it will do same as root Reducers
 export default combineReducers({
   movies, //movies(state property):movies(reducer managing that)
-    search
-})
-
+  search,
+});
