@@ -13,7 +13,7 @@ const initialMoviesState = {
 //always return updated state
 //pure reducers fxn
 //not changing current state sending the new state to store
-export default function movies(state = initialMoviesState, action) {
+export function movies(state = initialMoviesState, action) {
   // if state is undefined always set it as empty array
 
   switch (action.type) {
@@ -35,4 +35,27 @@ export default function movies(state = initialMoviesState, action) {
     default:
       return state;
   }
+}
+// default state for search
+const initialSearchState = {
+  result: {},
+};
+
+export function search(state = initialSearchState, action) {
+  return state;
+}
+// default state for root
+const initialRootState = {
+  movies: initialMoviesState,
+  search: initialSearchState,
+};
+
+//call both reducers from root
+// pass root to store
+// on each dispatch root will be called ,so both reducers will also be called
+export default function rootReducer(state = initialRootState, action) {
+  return {
+    movies: movies(state.movies, action),// calling movie reducer to update movie
+    search: search(state.search, action),// calling search reducer to update movie
+  };
 }
