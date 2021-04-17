@@ -35,12 +35,16 @@ class App extends React.Component {
   };
   render() {
     console.log("render");
-    const { movies } = this.props.store.getState(); //{movie:{},search:{}}
+    const { movies, search } = this.props.store.getState(); //{movie:{},search:{}}
     const { list, favourites, showFavourites } = movies;
     const displayMovies = showFavourites ? favourites : list; //will diaplay fav or movies depend on show movie ,true or false
     return (
       <div className="App">
-        <Navbar dispatch={this.props.store.dispatch} />
+        <Navbar
+          dispatch={this.props.store.dispatch}
+          search={search}
+          store={this.props.store}
+        />
         <div className="main">
           <div className="tabs">
             <div

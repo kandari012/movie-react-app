@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { data } from "../data";
-import { handleMovieSearch } from "../actions";
+import { handleMovieSearch, addMovieToList } from "../actions";
 
 export class Navbar extends Component {
   //every cahnge in the serach bar this fxn will be called
@@ -8,7 +7,6 @@ export class Navbar extends Component {
     super(props);
     this.state = {
       searchText: "",
-      showSearchResults: true,
     };
   }
   handleChange = (e) => {
@@ -19,15 +17,13 @@ export class Navbar extends Component {
   handleSearch = () => {
     const { searchText } = this.state;
     this.props.dispatch(handleMovieSearch(searchText));
+    console.log(this.props.store.getState());
   };
-  // handleAddMovies = (movie) => {
-  //   this.props.dispatch(addMovieToList(movie));
-  //   this.setState({
-  //     showSearchResults: false,
-  //   });
-  // };
+  handleAddMovies = (movie) => {
+    this.props.dispatch(addMovieToList(movie));
+  };
   render() {
-    const { showSearchResults } = this.state;
+    const { result: movie, showSearchResults } = this.props.search;
     return (
       <div className="nav">
         <div className="search-container">
@@ -39,10 +35,12 @@ export class Navbar extends Component {
           {showSearchResults && (
             <div className="search-results">
               <div className="search-result">
-                <img src={data[0].Poster} alt="search-pic" />
+                <img src={movie.Poster} alt="search-pic" />
                 <div className="movie-info">
-                  <span>{data[0].Title}</span>
-                  <button>Add to Movies</button>
+                  <span>{movie.Title}</span>
+                  <button onClick={() => this.handleAddMovies(movie)}>
+                    Add to Movies
+                  </button>
                 </div>
               </div>
             </div>
