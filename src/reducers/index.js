@@ -4,6 +4,7 @@ import {
   ADD_FAVOURITE,
   REMOVE_FAVOURITE,
   SET_SHOW_FAVOURITE,
+  ADD_MOVIE_TO_LIST
 } from "../actions";
 // converting our state from array to object
 const initialMoviesState = {

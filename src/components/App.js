@@ -40,7 +40,7 @@ class App extends React.Component {
     const displayMovies = showFavourites ? favourites : list; //will diaplay fav or movies depend on show movie ,true or false
     return (
       <div className="App">
-        <Navbar />
+        <Navbar dispatch={this.props.store.dispatch} />
         <div className="main">
           <div className="tabs">
             <div

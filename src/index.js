@@ -1,4 +1,5 @@
 import React from "react";
+import thunk from "redux-thunk";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import "./index.css";
@@ -21,11 +22,25 @@ import rootReducer from "./reducers/index";
 // better way of writing middleware
 const logger = ({ dispatch, getState }) => (next) => (action) => {
   //middleware code
-  console.log("action type", action.type);
+  if (typeof action !== "function") {
+    console.log("action type", action.type);
+  }
+
   next(action); //need to call next else app will be stuck calling next middleware or dispatch
 };
 
-const store = createStore(rootReducer, applyMiddleware(logger)); //creating store will pass reducer as argument
+//redux thunk will do the same thing
+// to call fxn if action is fxn else call next
+// will also fix async type of actioncreator due to api call
+// const thunk = ({ dispatch, getState }) => (next) => (action) => {
+//   if (typeof action === "function") {
+//     action(dispatch);
+//     return;
+//   }
+//   next(action); //need to call next else app will be stuck calling next middleware or dispatch
+// };
+
+const store = createStore(rootReducer, applyMiddleware(logger, thunk)); //creating store will pass reducer as argument
 // passing store as a prop to app
 ReactDOM.render(
   <React.StrictMode>
