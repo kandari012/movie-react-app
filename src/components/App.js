@@ -84,13 +84,23 @@ class App extends React.Component {
 }
 
 // if not using store or dispatch in component methods can directly use consumer in component else use wrapper
-class AppWrapper extends React.Component {
-  render() {
-    return (
-      <storeContext.Consumer>
-        {(store) => <App store={store} />}
-      </storeContext.Consumer>
-    );
-  }
+// class AppWrapper extends React.Component {
+//   render() {
+//     return (
+//       <storeContext.Consumer>
+//         {(store) => <App store={store} />}
+//       </storeContext.Consumer>
+//     );
+//   }
+// }
+
+//callback fxn tells waht dat we want to be passed to the component from store
+function callback(state) {
+  return {
+    movies: state.movies,
+    search: state.search,
+  };
 }
-export default AppWrapper;
+// assuming that the connect fxn will call the callback with the redux state
+const connectedAppComponent = connect(callback)(App); // connect fxn will return another fxn we will pass the componenet in which we want the argumnets
+export default connectedAppComponent;
