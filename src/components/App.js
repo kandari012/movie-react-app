@@ -3,7 +3,9 @@ import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, setShowFavourites } from "../actions";
 
+import { storeContext } from "../index";
 import { data } from "../data";
+
 class App extends React.Component {
   componentDidMount() {
     const { store } = this.props;
@@ -38,13 +40,10 @@ class App extends React.Component {
     const { movies, search } = this.props.store.getState(); //{movie:{},search:{}}
     const { list, favourites, showFavourites } = movies;
     const displayMovies = showFavourites ? favourites : list; //will diaplay fav or movies depend on show movie ,true or false
+
     return (
       <div className="App">
-        <Navbar
-          dispatch={this.props.store.dispatch}
-          search={search}
-          store={this.props.store}
-        />
+        <Navbar search={search} />
         <div className="main">
           <div className="tabs">
             <div
@@ -84,4 +83,14 @@ class App extends React.Component {
   }
 }
 
-export default App;
+// if not using store or dispatch in component methods can directly use consumer in component else use wrapper
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <storeContext.Consumer>
+        {(store) => <App store={store} />}
+      </storeContext.Consumer>
+    );
+  }
+}
+export default AppWrapper;

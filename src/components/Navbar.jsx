@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { handleMovieSearch, addMovieToList } from "../actions";
+import { storeContext } from "../index";
 
 export class Navbar extends Component {
   //every cahnge in the serach bar this fxn will be called
@@ -17,7 +18,6 @@ export class Navbar extends Component {
   handleSearch = () => {
     const { searchText } = this.state;
     this.props.dispatch(handleMovieSearch(searchText));
-    console.log(this.props.store.getState());
   };
   handleAddMovies = (movie) => {
     this.props.dispatch(addMovieToList(movie));
@@ -51,4 +51,15 @@ export class Navbar extends Component {
   }
 }
 
-export default Navbar;
+class NavbarWrapper extends React.Component {
+  render() {
+    return (
+      <storeContext.Consumer>
+        {(store) => (
+          <Navbar dispatch={store.dispatch} search={this.props.search} />
+        )}
+      </storeContext.Consumer>
+    );
+  }
+}
+export default NavbarWrapper;

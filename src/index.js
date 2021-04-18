@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import thunk from "redux-thunk";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
@@ -40,11 +40,26 @@ const logger = ({ dispatch, getState }) => (next) => (action) => {
 //   next(action); //need to call next else app will be stuck calling next middleware or dispatch
 // };
 
+export const storeContext = createContext(); //create a context as we are passing store so storecontect
+console.log("contect", storeContext); // have subscriber and provider properties
+
+class Provider extends React.Component {
+  render() {
+    const { store } = this.props;
+    // if store passed to the provider is cahnged all the child and there decendent who are using store will be rerendered
+    return (
+      <storeContext.Provider value={store}>
+        {/* // {store is available to all the child and decendant of child} */}
+        {this.props.children}
+      </storeContext.Provider>
+    );
+  }
+}
 const store = createStore(rootReducer, applyMiddleware(logger, thunk)); //creating store will pass reducer as argument
 // passing store as a prop to app
 ReactDOM.render(
-  <React.StrictMode>
-    <App store={store} />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
