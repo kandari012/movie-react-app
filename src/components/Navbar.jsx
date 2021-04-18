@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { handleMovieSearch, addMovieToList } from "../actions";
-import { connect } from "../index";
+import { connect } from "react-redux";
 
 export class Navbar extends Component {
   //every cahnge in the serach bar this fxn will be called
