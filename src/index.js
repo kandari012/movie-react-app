@@ -56,7 +56,50 @@ class Provider extends React.Component {
   }
 }
 const store = createStore(rootReducer, applyMiddleware(logger, thunk)); //creating store will pass reducer as argument
-// passing store as a prop to app
+
+// calling connect will take callback and componet will add all callback pro and dispatch to the comp and subscribe the comp to the store cahnges and call the comp
+// on unmount unsubscribe the changes
+// const connectedAppComponent = connect(callback)(App); calling connect return new comp
+export function connect(callback) {
+  return function (Component) {
+    class ConnectedComponent extends React.Component {
+      constructor(props) {
+        super(props);
+        // subscribe  will return another fxn to unsubscribe
+        this.unsubscribe = this.props.store.subscribe(
+          () =>
+            // only those comp will be rerendered in which  props passed are changed like movie
+            this.forceUpdate() // forcefully update the comp as after state change no rerener so no chnages showing on the UI
+        );
+      }
+      componentWillUnmount() {
+        // will unsubscribe when component will unmount
+        this.unsubscribe();
+      }
+      render() {
+        const { store } = this.props;
+        const state = store.getState();
+        const dataToBePassedAsProps = callback(state);
+        return (
+          //passing props from call back and dispatch to the component
+          <Component {...dataToBePassedAsProps} dispatch={store.dispatch} />
+        );
+      }
+    }
+    // need state in constructor so call wrapper
+    class ConnectedComponentWrapper extends React.Component {
+      render() {
+        return (
+          <storeContext.Consumer>
+            {(store) => <ConnectedComponent store={store} />}
+          </storeContext.Consumer>
+        );
+      }
+    }
+    return ConnectedComponentWrapper;
+  };
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <App />

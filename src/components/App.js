@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import { addMovies, setShowFavourites } from "../actions";
 
-import { storeContext } from "../index";
+import { connect } from "../index";
 import { data } from "../data";
 
 class App extends React.Component {
@@ -12,19 +12,14 @@ class App extends React.Component {
 
     // will be called when our state changes subscribing to the store chnages
     // after dispatched it will be called imidiately
-    store.subscribe(() => {
-      console.log("updated");
-      this.forceUpdate(); // forcefullu update the comp as after state change no rerener so no chnages showing on the UI
-    });
 
     //make api call
     //dispatch action
-    store.dispatch(addMovies(data));
-    console.log("state", store.getState());
+    this.props.dispatch(addMovies(data));
   }
 
   isMovieFavourite = (movie) => {
-    const { movies } = this.props.store.getState();
+    const { movies } = this.props;
     const index = movies.favourites.indexOf(movie); // will return index if movie exist else -1
     if (index !== -1) {
       return true;
@@ -32,12 +27,11 @@ class App extends React.Component {
     return false;
   };
   onTabChange = (val) => {
-    this.props.store.dispatch(setShowFavourites(val));
-    console.log(this.props.store.getState());
+    this.props.dispatch(setShowFavourites(val));
   };
   render() {
     console.log("render");
-    const { movies, search } = this.props.store.getState(); //{movie:{},search:{}}
+    const { movies, search } = this.props; //{movie:{},search:{}}
     const { list, favourites, showFavourites } = movies;
     const displayMovies = showFavourites ? favourites : list; //will diaplay fav or movies depend on show movie ,true or false
 
@@ -66,9 +60,8 @@ class App extends React.Component {
                 <MovieCard
                   movie={movie}
                   key={`movies-${index}`}
-                  dispatch={this.props.store.dispatch}
+                  dispatch={this.props.dispatch}
                   isFavourite={this.isMovieFavourite(movie)}
-                  store={this.props.store}
                 />
               );
             })}
@@ -95,12 +88,12 @@ class App extends React.Component {
 // }
 
 //callback fxn tells waht dat we want to be passed to the component from store
-function callback(state) {
+function mapStateToProps(state) {
   return {
     movies: state.movies,
     search: state.search,
   };
 }
 // assuming that the connect fxn will call the callback with the redux state
-const connectedAppComponent = connect(callback)(App); // connect fxn will return another fxn we will pass the componenet in which we want the argumnets
+const connectedAppComponent = connect(mapStateToProps)(App); // connect fxn will return another fxn we will pass the componenet in which we want the argumnets
 export default connectedAppComponent;

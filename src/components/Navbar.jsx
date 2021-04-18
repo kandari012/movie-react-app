@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { handleMovieSearch, addMovieToList } from "../actions";
-import { storeContext } from "../index";
+import { connect } from "../index";
 
 export class Navbar extends Component {
   //every cahnge in the serach bar this fxn will be called
@@ -51,15 +51,12 @@ export class Navbar extends Component {
   }
 }
 
-class NavbarWrapper extends React.Component {
-  render() {
-    return (
-      <storeContext.Consumer>
-        {(store) => (
-          <Navbar dispatch={store.dispatch} search={this.props.search} />
-        )}
-      </storeContext.Consumer>
-    );
-  }
+//callback fxn tells waht dat we want to be passed to the component from store
+function mapStateToProps(state) {
+  return {
+    search: state.search,
+  };
 }
-export default NavbarWrapper;
+// assuming that the connect fxn will call the callback with the redux state
+const connectedAppComponent = connect(mapStateToProps)(Navbar); // connect fxn will return another fxn we will pass the componenet in which we want the argumnets
+export default connectedAppComponent;
